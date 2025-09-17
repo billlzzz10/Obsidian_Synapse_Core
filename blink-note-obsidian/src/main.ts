@@ -2,23 +2,23 @@
 
 import { Plugin } from 'obsidian';
 import { eventBus } from './services/EventBus';
-// import { BlinkNoteView, VIEW_TYPE_BLINK_NOTE } from './ui/BlinkNoteView';
-// import { SettingTab } from './settings/SettingTab';
-import { initializeAgents } from './agents';
+import { initializeAgents, InitializedAgents } from './agents';
 import { ToolRegistry } from './tools/ToolRegistry';
 import { FilesystemProvider } from './tools/providers/FilesystemProvider';
 import { ClickUpProvider } from './tools/providers/ClickUpProvider';
 import { Context7Provider } from './tools/providers/Context7Provider';
+import { SyncProvider } from './tools/providers/SyncProvider';
 
 export default class BlinkNotePlugin extends Plugin {
     toolRegistry: ToolRegistry;
+    private agents?: InitializedAgents;
 
     async onload() {
         console.log('Blink Note Plugin: Loading...');
 
         // 1. Initialize Core Services & Agents
         this.initializeTools();
-        initializeAgents();
+        this.agents = initializeAgents({ toolRegistry: this.toolRegistry });
 
         // 2. Register the custom view for our UI
         // this.registerView(
@@ -47,6 +47,7 @@ export default class BlinkNotePlugin extends Plugin {
 
     async onunload() {
         console.log('Blink Note Plugin: Unloading...');
+        this.agents?.dispose();
     }
 
     initializeTools(): void {
@@ -56,6 +57,7 @@ export default class BlinkNotePlugin extends Plugin {
         this.toolRegistry.register(new FilesystemProvider());
         this.toolRegistry.register(new ClickUpProvider());
         this.toolRegistry.register(new Context7Provider()); // <-- User-requested provider
+        this.toolRegistry.register(new SyncProvider());
 
         console.log('Tool providers registered.');
     }
