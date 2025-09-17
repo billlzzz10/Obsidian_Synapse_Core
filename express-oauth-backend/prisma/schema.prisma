@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  password      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  oauthTokens   OAuthToken[]
+  aiRequests    AIRequest[]
+  sentryEvents  SentryEvent[]
+}
+
+model OAuthToken {
+  id             String    @id @default(cuid())
+  provider       String    // clickup, github, etc.
+  accessToken    String
+  refreshToken   String?
+  expiresAt      DateTime?
+  scope          String?
+  tokenType      String    @default("Bearer")
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, provider])
+}
+
+model AIRequest {
+  id            String    @id @default(cuid())
+  provider      String    // openai, anthropic, google, etc.
+  model         String
+  prompt        String
+  response      String?
+  tokens        Int?
+  cost          Float?
+  status        String    @default("pending") // pending, completed, failed
+  error         String?
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model SentryEvent {
+  id            String    @id @default(cuid())
+  eventId       String    @unique
+  level         String    // error, warning, info, debug
+  message       String?
+  exception     String?
+  stackTrace    String?
+  environment   String?
+  release       String?
+  tags          String?   // JSON string
+  extra         String?   // JSON string
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sentToSentry  Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+}
