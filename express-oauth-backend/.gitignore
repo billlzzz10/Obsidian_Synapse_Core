@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+coverage/
+.vscode/
+.idea/
+*.swp
+*.swo
+temp/
+uploads/
+prisma/*.db
+prisma/*.db-journal
+/src/generated/prisma
