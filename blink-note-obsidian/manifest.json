@@ -1,0 +1,10 @@
+{
+  "id": "blink-note",
+  "name": "Blink Note",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "An AI-native command console that turns natural language into executable, transparent, and user-approved action plans. Automate your workflow across local files and external services like ClickUp and GitHub.",
+  "author": "Your Name / Your Company",
+  "authorUrl": "https://your-website.com",
+  "isDesktopOnly": false
+}
