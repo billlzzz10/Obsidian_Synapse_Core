@@ -6,4 +6,7 @@
 export interface IAgent {
     // Method to initialize the agent, subscribing to relevant events.
     initialize(): void;
+
+    // Optional method to clean up resources.
+    dispose?(): void;
 }
