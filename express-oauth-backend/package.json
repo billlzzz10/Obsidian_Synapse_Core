@@ -18,7 +18,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^6.16.2",
+    "@prisma/client": "^6.19.1",
     "@sentry/node": "^10.12.0",
     "@sentry/profiling-node": "^10.12.0",
     "@types/bcryptjs": "^2.4.6",
